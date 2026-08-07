@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>心屿 HeartIsland · 陪你安放每一种情绪</title>
+<meta name="description" content="心屿是一款提供情绪记录、心理量表自评、正念冥想与专业心理咨询师对接的心理健康陪伴 App。本地优先、隐私至上。" />
+<style>
+  :root{
+    --bg:#0c0a14; --bg2:#120e1f; --card:rgba(255,255,255,.04); --card-line:rgba(255,255,255,.09);
+    --text:#F2EEFB; --sub:#A99FC8; --brand:#8B5CF6; --brand2:#A78BFA; --brand3:#C4B5FD;
+    --pink:#F0ABFC; --sky:#7DD3FC; --orange:#FDBA74; --green:#6EE7B7; --radius:22px;
+    --maxw:1080px; --ease:cubic-bezier(.16,1,.3,1);
+  }
+  [data-theme="light"]{
+    --bg:#F6F4FB; --bg2:#EFEAFB; --card:rgba(20,12,40,.04); --card-line:rgba(20,12,40,.10);
+    --text:#1B1430; --sub:#5B5276; --brand:#7C3AED; --brand2:#8B5CF6; --brand3:#6D28D9;
+    --pink:#DB2777; --sky:#0EA5E9; --orange:#EA580C; --green:#059669;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background .4s var(--ease),color .4s var(--ease)}
+  /* 背景光晕 */
+  .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .aurora span{position:absolute;border-radius:50%;filter:blur(80px);opacity:.5;animation:float 16s var(--ease) infinite}
+  .aurora .a1{width:520px;height:520px;background:radial-gradient(circle,#8B5CF6,transparent 70%);top:-160px;right:-120px}
+  .aurora .a2{width:420px;height:420px;background:radial-gradient(circle,#F0ABFC,transparent 70%);bottom:-120px;left:-120px;animation-delay:-6s}
+  .aurora .a3{width:360px;height:360px;background:radial-gradient(circle,#7DD3FC,transparent 70%);top:40%;left:60%;animation-delay:-11s}
+  @keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(0,40px) scale(1.08)}}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px;position:relative;z-index:1}
+
+  /* 导航 */
+  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px) saturate(160%);background:color-mix(in srgb,var(--bg) 72%,transparent);
+    border-bottom:1px solid var(--card-line)}
+  .nav-in{max-width:var(--maxw);margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-.3px}
+  .logo .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--pink));display:grid;place-items:center;font-size:16px;box-shadow:0 8px 24px -8px var(--brand)}
+  .nav-links{display:flex;gap:26px;font-size:14.5px}
+  .nav-links a{color:var(--sub);text-decoration:none;transition:color .25s}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{display:flex;align-items:center;gap:12px}
+  .theme-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--card-line);background:var(--card);color:var(--text);cursor:pointer;font-size:16px;transition:transform .25s var(--ease),border-color .25s}
+  .theme-btn:hover{transform:translateY(-2px);border-color:var(--brand2)}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:13px;border:none;cursor:pointer;font-size:14.5px;font-weight:700;text-decoration:none;transition:transform .25s var(--ease),box-shadow .25s,filter .25s}
+  .btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 12px 34px -12px var(--brand)}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 44px -12px var(--brand);filter:brightness(1.06)}
+  .btn-ghost{background:var(--card);border:1px solid var(--card-line);color:var(--text)}
+  .btn-ghost:hover{transform:translateY(-3px);border-color:var(--brand2)}
+
+  /* Hero */
+  header.hero{padding:84px 0 64px;text-align:center}
+  .badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--brand3);background:var(--card);border:1px solid var(--card-line);padding:7px 14px;border-radius:999px;margin-bottom:22px}
+  .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 30%,transparent)}
+  h1{font-size:clamp(34px,6vw,58px);line-height:1.08;font-weight:850;letter-spacing:-1.5px;margin-bottom:18px}
+  h1 .grad{background:linear-gradient(110deg,var(--brand2),var(--pink) 60%,var(--sky));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.sub{max-width:620px;margin:0 auto 32px;font-size:clamp(15px,2.4vw,18px);color:var(--sub)}
+  .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+  .hero-note{font-size:13px;color:var(--sub)}
+  /* Hero 视觉：小屿 IP 抽象球 */
+  .hero-orb{width:min(340px,80vw);height:min(340px,80vw);margin:46px auto 0;position:relative;display:grid;place-items:center}
+  .hero-orb .ring{position:absolute;inset:0;border-radius:50%;border:1px solid var(--card-line);animation:spin 26s linear infinite}
+  .hero-orb .ring.r2{inset:26px;animation-direction:reverse;animation-duration:34s;border-color:color-mix(in srgb,var(--brand) 40%,transparent)}
+  .hero-orb .core{width:62%;height:62%;border-radius:50%;background:radial-gradient(circle at 32% 28%,var(--brand2),var(--brand) 55%,#3b1f5e);box-shadow:0 30px 80px -20px var(--brand),inset 0 0 60px rgba(255,255,255,.18);animation:bob 5s var(--ease) infinite}
+  .hero-orb .tail{position:absolute;bottom:14%;left:50%;width:42%;height:42%;background:radial-gradient(circle,var(--sky),transparent 70%);border-radius:50%;transform:translateX(-50%);opacity:.7;filter:blur(2px)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+  /* 通用 section */
+  section.block{padding:72px 0}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brand2);margin-bottom:12px}
+  h2.title{font-size:clamp(26px,4vw,38px);font-weight:820;letter-spacing:-1px;margin-bottom:14px}
+  .lead2{max-width:640px;color:var(--sub);font-size:16px;margin-bottom:40px}
+
+  /* 功能网格 */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card{background:var(--card);border:1px solid var(--card-line);border-radius:var(--radius);padding:24px;transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;opacity:0;transform:translateY(26px)}
+  .card.in{opacity:1;transform:none}
+  .card:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--brand) 55%,transparent);box-shadow:0 24px 60px -28px var(--brand)}
+  .card .ico{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:22px;margin-bottom:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--brand) 30%,transparent),transparent)}
+  .card h3{font-size:18px;font-weight:750;margin-bottom:8px}
+  .card p{font-size:14px;color:var(--sub)}
+
+  /* 信任 / 合规 */
+  .trust{background:linear-gradient(135deg,color-mix(in srgb,var(--brand) 16%,transparent),color-mix(in srgb,var(--sky) 10%,transparent));border:1px solid var(--card-line);border-radius:28px;padding:44px;display:grid;grid-template-columns:1.1fr 1fr;gap:36px;align-items:center}
+  .trust ul{list-style:none;margin-top:18px}
+  .trust li{display:flex;gap:12px;align-items:flex-start;margin:14px 0;font-size:15px;color:var(--text)}
+  .trust li .ck{color:var(--green);font-weight:800;flex-shrink:0}
+  .trust .pills{display:flex;flex-wrap:wrap;gap:10px}
+  .pill{font-size:13px;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--card-line);color:var(--brand3)}
+
+  /* 数据看板式统计条 */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
+  .stat{background:var(--card);border:1px solid var(--card-line);border-radius:18px;padding:22px;text-align:center}
+  .stat .n{font-size:30px;font-weight:850;background:linear-gradient(120deg,var(--brand2),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .l{font-size:13px;color:var(--sub);margin-top:4px}
+
+  /* 下载 CTA */
+  .download{text-align:center;background:linear-gradient(135deg,#2a1d4d,#3b1f5e);border:1px solid var(--card-line);border-radius:30px;padding:60px 28px;position:relative;overflow:hidden}
+  .download h2{color:#fff}
+  .download p{color:#C9BEE8;max-width:520px;margin:0 auto 30px}
+  .store-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+  /* 页脚 */
+  footer{border-top:1px solid var(--card-line);padding:42px 0 60px;margin-top:30px}
+  .foot-in{max-width:var(--maxw);margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  .foot-in .col h4{font-size:14px;margin-bottom:12px;color:var(--text)}
+  .foot-in .col a{display:block;color:var(--sub);text-decoration:none;font-size:13.5px;margin:7px 0;transition:color .2s}
+  .foot-in .col a:hover{color:var(--brand2)}
+  .copy{width:100%;text-align:center;color:var(--sub);font-size:12.5px;margin-top:30px}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+
+  @media(max-width:860px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .trust{grid-template-columns:1fr;padding:30px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .nav-links{display:none}
+  }
+  @media(max-width:560px){
+    .grid{grid-template-columns:1fr}
+    header.hero{padding:54px 0 40px}
+  }
+</style>
+</head>
+<body>
+<div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+
+<nav>
+  <div class="nav-in">
+    <div class="logo"><span class="mark">🏝️</span> 心屿 <span style="color:var(--sub);font-weight:600;font-size:13px">HeartIsland</span></div>
+    <div class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#trust">安全合规</a>
+      <a href="#data">关于数据</a>
+      <a href="#download">下载</a>
+    </div>
+    <div class="nav-cta">
+      <button class="theme-btn" id="themeToggle" aria-label="切换主题">🌙</button>
+      <a href="#download" class="btn btn-primary">免费下载</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="badge reveal"><span class="dot"></span> 本地优先 · 隐私至上 · 专业心理陪伴</div>
+    <h1 class="reveal">陪你安放<br><span class="grad">每一种情绪</span></h1>
+    <p class="sub reveal">心屿是一款温柔的心理健康陪伴 App：记录心情、做专业心理量表自评、跟练正念冥想，也能一键预约持证心理咨询师。你的数据默认只属于你。</p>
+    <div class="hero-cta reveal">
+      <a href="#download" class="btn btn-primary">⬇ 立即下载</a>
+      <a href="#features" class="btn btn-ghost">了解功能</a>
+    </div>
+    <p class="hero-note reveal">iOS / Android 双端 · 无需注册即可开始记录</p>
+    <div class="hero-orb reveal" aria-hidden="true">
+      <div class="ring"></div><div class="ring r2"></div>
+      <div class="tail"></div>
+      <div class="core"></div>
+    </div>
+  </div>
+</header>
+
+<section class="block" id="features">
+  <div class="wrap">
+    <div class="eyebrow reveal">CORE FEATURES</div>
+    <h2 class="title reveal">把心理照护，做成日常的小习惯</h2>
+    <p class="lead2 reveal">六个有机整合的模块，从自我觉察到专业支持，陪你走完每一段情绪旅程。</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🌤️</div><h3>心情记录</h3><p>每天 30 秒记下当下情绪，本周曲线与 AI 小结帮你看见自己的节奏。</p></div>
+      <div class="card"><div class="ico">📋</div><h3>心理量表自评</h3><p>PHQ-9、GAD-7 等临床常用量表，标准计分与解读，帮你看清状态变化。</p></div>
+      <div class="card"><div class="ico">🧘</div><h3>正念冥想</h3><p>呼吸练习、助眠白噪音与引导冥想，随时给紧绷的神经松一口气。</p></div>
+      <div class="card"><div class="ico">💬</div><h3>持证咨询师</h3><p>按真实日期与半小时档自主预约，咨询师档期透明，付费后可确认。</p></div>
+      <div class="card"><div class="ico">🤖</div><h3>AI 温柔陪伴</h3><p>随时倾诉的 AI 倾听者，本地优先运行，做你深夜也能开口的安全树洞。</p></div>
+      <div class="card"><div class="ico">🫂</div><h3>匿名互助社区</h3><p>不暴露身份，和同路人互相取暖。敏感内容经温柔引导，避免二次伤害。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="trust" style="padding-top:0">
+  <div class="wrap">
+    <div class="trust reveal">
+      <div>
+        <div class="eyebrow">SAFE & COMPLIANT</div>
+        <h2 class="title" style="font-size:clamp(24px,3.4vw,32px)">你的隐私，是底线不是选项</h2>
+        <ul>
+          <li><span class="ck">✓</span><div><b>本地优先存储</b>：心情、日记、测评默认只存在你的设备，不上传云端。</div></li>
+          <li><span class="ck">✓</span><div><b>HealthKit 严守规范</b>：绝不用于广告或转售，仅在本 App 内做情绪—身心关联分析。</div></li>
+          <li><span class="ck">✓</span><div><b>完全可导出 / 可删除</b>：一键导出全部数据，或随时抹除本地记录。</div></li>
+          <li><span class="ck">✓</span><div><b>不构成医疗诊断</b>：所有内容均为辅助，紧急情况引导你联系专业援助。</div></li>
+        </ul>
+      </div>
+      <div>
+        <div class="pills">
+          <span class="pill">🔒 端侧优先</span>
+          <span class="pill">🍎 HealthKit 合规</span>
+          <span class="pill">📤 数据可携带</span>
+          <span class="pill">🗑️ 一键清除</span>
+          <span class="pill">🛡️ 匿名社区</span>
+          <span class="pill">⚕️ 持证咨询</span>
+        </div>
+        <p style="color:var(--sub);font-size:14px;margin-top:18px">我们遵循 Apple《HealthKit 隐私政策》与 App Store 审核指南 5.1.3，并把完整条款写进<a href="privacy.html" style="color:var(--brand2)">隐私政策</a>与<a href="terms.html" style="color:var(--brand2)">用户协议</a>。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="data" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow reveal">WHY HEARTISLAND</div>
+    <h2 class="title reveal">为什么越来越多人选择心屿</h2>
+    <p class="lead2 reveal">不是又一个打卡工具，而是一套真正懂情绪的陪伴系统。</p>
+    <div class="stats">
+      <div class="stat reveal"><div class="n">6+</div><div class="l">有机整合模块</div></div>
+      <div class="stat reveal"><div class="n">100%</div><div class="l">本地优先数据</div></div>
+      <div class="stat reveal"><div class="n">30s</div><div class="l">极简心情记录</div></div>
+      <div class="stat reveal"><div class="n">0</div><div class="l">强制广告追踪</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="download" style="padding-top:0">
+  <div class="wrap">
+    <div class="download reveal">
+      <h2>把这个温柔的角落，装进口袋</h2>
+      <p>现在下载心屿，从今天的第一条心情开始。无需付费，先记录、先觉察。</p>
+      <div class="store-row">
+        <a href="#" class="btn btn-primary"> App Store 下载</a>
+        <a href="#" class="btn btn-ghost"> Android 下载</a>
+        <a href="#" class="btn btn-ghost"> TestFlight 内测</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-in">
+    <div class="col" style="max-width:280px">
+      <div class="logo" style="margin-bottom:10px"><span class="mark">🏝️</span> 心屿</div>
+      <p style="color:var(--sub);font-size:13.5px">一款温柔的心理健康陪伴 App。陪你记录、觉察，并在需要时接住你。</p>
+    </div>
+    <div class="col"><h4>产品</h4><a href="#features">功能介绍</a><a href="#trust">安全合规</a><a href="#download">下载</a></div>
+    <div class="col"><h4>法律</h4><a href="privacy.html">隐私政策</a><a href="terms.html">用户协议</a><a href="mailto:privacy@heartisland.app">联系我们</a></div>
+    <div class="col"><h4>支持</h4><a href="mailto:support@heartisland.app">问题反馈</a><a href="#features">使用指南</a></div>
+  </div>
+  <div class="copy">© 2026 心屿 HeartIsland · 本应用提供辅助功能，不构成医疗诊断。如遇紧急心理危机，请拨打全国心理援助热线 400-161-9995。</div>
+</footer>
+
+<script>
+  // 主题切换（记忆到 localStorage）
+  (function(){
+    var root=document.documentElement, btn=document.getElementById('themeToggle');
+    var saved=localStorage.getItem('hi-site-theme')||'dark';
+    apply(saved);
+    function apply(t){root.setAttribute('data-theme',t);btn.textContent=t==='dark'?'🌙':'☀️';}
+    btn.addEventListener('click',function(){var next=root.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('hi-site-theme',next);apply(next);});
+  })();
+  // 滚动渐显
+  (function(){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+    document.querySelectorAll('.reveal,.card').forEach(function(el){io.observe(el);});
+  })();
+</script>
+</body>
+</html>
