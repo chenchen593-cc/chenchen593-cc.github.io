@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>帮助中心 - 时安</title>
+  <meta name="description" content="时安帮助中心：快速上手指南、常见问题与联系方式，陪你更顺手地使用时安。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#F8F6FB', 100: '#EDE8F5', 200: '#DDD4ED', 300: '#C4B0D4',
+              400: '#A78BCE', 500: '#8E6AB8', 600: '#7C5BA8', 700: '#6A4C8F',
+              800: '#573D76', 900: '#442F5D',
+            },
+          },
+          fontFamily: { sans: ['"Noto Sans SC"', 'system-ui', 'sans-serif'] },
+        },
+      },
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .card-shadow { box-shadow: 0 8px 30px -8px rgba(124, 91, 168, 0.12); }
+    .lift { transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease; }
+    .lift:hover { transform: translateY(-6px); box-shadow: 0 18px 45px -10px rgba(124, 91, 168, 0.22); }
+    .faq-btn[aria-expanded="true"] .faq-chevron { transform: rotate(180deg); }
+    .nav-link.active { color: #7C5BA8; font-weight: 500; }
+    @media (prefers-reduced-motion: reduce) {
+      [data-aos] { opacity: 1 !important; transform: none !important; }
+      .lift:hover { transform: none; }
+    }
+  </style>
+</head>
+<body class="font-sans text-gray-900 bg-brand-50 antialiased" x-data="{ open: false }">
+
+  <!-- Header -->
+  <header id="siteHeader" class="fixed top-0 inset-x-0 z-50 bg-brand-50/90 backdrop-blur-md border-b border-brand-100 transition-shadow duration-300">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center gap-2.5 group">
+          <img src="images/anan-growing-happy.png" alt="时安 IP 安安" class="h-10 w-10 object-contain rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+          <span class="text-2xl font-bold text-brand-600 tracking-tight">时安</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-10">
+          <a href="index.html#features" class="nav-link text-gray-700 hover:text-brand-600 transition">功能</a>
+          <a href="index.html#meditation" class="nav-link text-gray-700 hover:text-brand-600 transition">冥想</a>
+          <a href="index.html#testimonials" class="nav-link text-gray-700 hover:text-brand-600 transition">用户评价</a>
+          <a href="help.html" class="nav-link text-brand-600 font-medium transition" aria-current="page">帮助中心</a>
+          <a href="index.html#contact" class="nav-link text-gray-700 hover:text-brand-600 transition">联系我们</a>
+        </nav>
+        <div class="hidden md:block">
+          <a href="index.html#cta" class="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-brand-600 text-white font-medium hover:bg-brand-700 transition">下载 App</a>
+        </div>
+        <button class="md:hidden p-2 text-gray-700" @click="open = !open" aria-label="切换菜单">
+          <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+    </div>
+    <div x-show="open" x-transition class="md:hidden border-t border-brand-100 bg-white">
+      <div class="px-6 py-4 space-y-3">
+        <a href="index.html#features" @click="open = false" class="block text-gray-700 hover:text-brand-600">功能</a>
+        <a href="index.html#meditation" @click="open = false" class="block text-gray-700 hover:text-brand-600">冥想</a>
+        <a href="index.html#testimonials" @click="open = false" class="block text-gray-700 hover:text-brand-600">用户评价</a>
+        <a href="help.html" @click="open = false" class="block text-brand-600 font-medium">帮助中心</a>
+        <a href="index.html#contact" @click="open = false" class="block text-gray-700 hover:text-brand-600">联系我们</a>
+        <a href="index.html#cta" @click="open = false" class="inline-flex items-center justify-center w-full px-6 py-2.5 rounded-full bg-brand-600 text-white font-medium">下载 App</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="pt-28 lg:pt-32 pb-20">
+    <!-- 页面标题 -->
+    <section class="max-w-3xl mx-auto px-6 lg:px-8 text-center mb-16">
+      <span data-aos="fade-up" class="inline-flex items-center px-4 py-1.5 rounded-full bg-brand-100 text-brand-700 text-sm font-medium mb-6">支持</span>
+      <h1 data-aos="fade-up" data-aos-delay="100" class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">帮助中心</h1>
+      <p data-aos="fade-up" data-aos-delay="200" class="text-lg text-gray-600">关于时安的使用问题，这里也许有答案</p>
+    </section>
+
+    <!-- 快速上手 -->
+    <section class="max-w-7xl mx-auto px-6 lg:px-8 mb-20">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 data-aos="fade-up" class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">快速上手</h2>
+        <p data-aos="fade-up" data-aos-delay="100" class="text-gray-600">四步，开始你的心理关怀之旅</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div data-aos="fade-up" data-aos-delay="0" class="lift bg-white rounded-3xl p-8 card-shadow">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-100 text-brand-700 text-lg font-bold mb-5">记</div>
+          <h4 class="text-lg font-bold text-gray-900 mb-2">记录心情</h4>
+          <p class="text-sm text-gray-600 leading-relaxed">打开 App 首页，点「写日记」即可记录当下情绪，支持文字、心情标签与照片。</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="100" class="lift bg-white rounded-3xl p-8 card-shadow">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-100 text-brand-700 text-lg font-bold mb-5">树</div>
+          <h4 class="text-lg font-bold text-gray-900 mb-2">树洞倾诉</h4>
+          <p class="text-sm text-gray-600 leading-relaxed">在「社区」进入树洞，匿名发布心事，收获来自陌生人的温暖回应。</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="200" class="lift bg-white rounded-3xl p-8 card-shadow">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-100 text-brand-700 text-lg font-bold mb-5">冥</div>
+          <h4 class="text-lg font-bold text-gray-900 mb-2">冥想放松</h4>
+          <p class="text-sm text-gray-600 leading-relaxed">进入「冥想」，选择入睡引导、焦虑缓解或呼吸练习，跟着安安一起放松。</p>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="300" class="lift bg-white rounded-3xl p-8 card-shadow">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-100 text-brand-700 text-lg font-bold mb-5">咨</div>
+          <h4 class="text-lg font-bold text-gray-900 mb-2">预约咨询</h4>
+          <p class="text-sm text-gray-600 leading-relaxed">在「我的」选择心理咨询师，按专长与需求匹配，在线预约你的专属陪伴。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 常见问题 -->
+    <section class="max-w-3xl mx-auto px-6 lg:px-8 mb-20">
+      <div class="text-center mb-12">
+        <h2 data-aos="fade-up" class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">常见问题</h2>
+        <p data-aos="fade-up" data-aos-delay="100" class="text-gray-600">关于时安，你可能想知道的</p>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="150" class="bg-white rounded-3xl card-shadow overflow-hidden" x-data="{ open: 1 }">
+        <div class="border-b border-brand-100">
+          <button class="faq-btn w-full flex items-center justify-between px-6 py-5 text-left hover:bg-brand-50/50 transition" @click="open = open === 1 ? 0 : 1" :aria-expanded="open === 1 ? 'true' : 'false'">
+            <span class="font-semibold text-gray-900">时安适合什么样的人使用？</span>
+            <svg class="faq-chevron w-5 h-5 text-brand-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div x-show="open === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-5 text-gray-600 leading-relaxed">
+            时安适合希望更好了解自己情绪、需要安全倾诉空间，或想要通过冥想与专业支持改善心理状态的人。无论你是想记录心情、找人倾诉，还是寻求专业咨询，时安都愿意陪你一起。
+          </div>
+        </div>
+        <div class="border-b border-brand-100">
+          <button class="faq-btn w-full flex items-center justify-between px-6 py-5 text-left hover:bg-brand-50/50 transition" @click="open = open === 2 ? 0 : 2" :aria-expanded="open === 2 ? 'true' : 'false'">
+            <span class="font-semibold text-gray-900">咨询师都是专业的吗？</span>
+            <svg class="faq-chevron w-5 h-5 text-brand-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div x-show="open === 2" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-5 text-gray-600 leading-relaxed">
+            是的。入驻时安的咨询师均经过资质审核，具备国家认可的心理咨询或相关执业资格。你可以根据专长、风格和需求，选择最适合自己的咨询师。
+          </div>
+        </div>
+        <div class="border-b border-brand-100">
+          <button class="faq-btn w-full flex items-center justify-between px-6 py-5 text-left hover:bg-brand-50/50 transition" @click="open = open === 3 ? 0 : 3" :aria-expanded="open === 3 ? 'true' : 'false'">
+            <span class="font-semibold text-gray-900">我的隐私数据安全吗？</span>
+            <svg class="faq-chevron w-5 h-5 text-brand-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div x-show="open === 3" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-5 text-gray-600 leading-relaxed">
+            安全是我们的底线。你的日记、倾诉内容与咨询记录均经过加密存储，树洞社区默认匿名。我们严格遵守相关法律法规，未经你同意不会向第三方分享个人数据。
+          </div>
+        </div>
+        <div class="border-b border-brand-100">
+          <button class="faq-btn w-full flex items-center justify-between px-6 py-5 text-left hover:bg-brand-50/50 transition" @click="open = open === 4 ? 0 : 4" :aria-expanded="open === 4 ? 'true' : 'false'">
+            <span class="font-semibold text-gray-900">冥想功能需要付费吗？</span>
+            <svg class="faq-chevron w-5 h-5 text-brand-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div x-show="open === 4" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-5 text-gray-600 leading-relaxed">
+            时安提供丰富的基础冥想内容，包括呼吸练习、入睡引导和短时放松，均可免费使用。部分进阶课程与专题引导属于会员权益，可按需订阅。
+          </div>
+        </div>
+        <div>
+          <button class="faq-btn w-full flex items-center justify-between px-6 py-5 text-left hover:bg-brand-50/50 transition" @click="open = open === 5 ? 0 : 5" :aria-expanded="open === 5 ? 'true' : 'false'">
+            <span class="font-semibold text-gray-900">如何联系客服或反馈问题？</span>
+            <svg class="faq-chevron w-5 h-5 text-brand-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          <div x-show="open === 5" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-5 text-gray-600 leading-relaxed">
+            你可以在 App 内「我的 - 帮助与反馈」中直接留言，也可以发送邮件至 maple593@163.com，我们会在 1-2 个工作日内回复你。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 联系卡片 -->
+    <section class="max-w-3xl mx-auto px-6 lg:px-8">
+      <div data-aos="fade-up" class="rounded-3xl bg-brand-600 px-8 py-10 text-center">
+        <h3 class="text-2xl font-bold text-white mb-3">还没找到答案？</h3>
+        <p class="text-brand-100 mb-6">给我们写封信，安安团队会很乐意帮你</p>
+        <a href="mailto:maple593@163.com" class="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-white text-brand-700 font-semibold hover:bg-brand-50 transition shadow-lg">
+          maple593@163.com
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+      <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div class="lg:col-span-2">
+          <a href="index.html" class="flex items-center gap-2.5 group">
+            <img src="images/anan-growing-happy.png" alt="时安 IP 安安" class="h-8 w-8 object-contain rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+            <span class="text-2xl font-bold">时安</span>
+          </a>
+          <p class="mt-4 text-gray-400 max-w-xs">你的专属心理陪伴空间</p>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">产品</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="index.html#features" class="hover:text-white transition">功能介绍</a></li>
+            <li><a href="index.html#meditation" class="hover:text-white transition">正念冥想</a></li>
+            <li><a href="index.html#testimonials" class="hover:text-white transition">用户评价</a></li>
+            <li><a href="index.html#cta" class="hover:text-white transition">下载 App</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">支持</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="help.html" class="hover:text-white transition" aria-current="page">帮助中心</a></li>
+            <li><a href="privacy.html" class="hover:text-white transition">隐私政策</a></li>
+            <li><a href="terms.html" class="hover:text-white transition">用户协议</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">联系</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="mailto:maple593@163.com" class="hover:text-white transition">maple593@163.com</a></li>
+            <li>微信公众号：时安心理</li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm">
+        <p>Copyright 2026 时安 Shian. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- AOS 初始化 -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true, offset: 80, delay: 0 });
+    document.addEventListener('DOMContentLoaded', () => {
+      const header = document.getElementById('siteHeader');
+      const onScroll = () => header.classList.toggle('shadow-sm', window.scrollY > 10);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    });
+  </script>
+</body>
+</html>

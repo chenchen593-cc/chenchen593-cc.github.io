@@ -1,266 +1,662 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>安禾 Anhe · 陪你安放每一种情绪</title>
-<meta name="description" content="安禾是一款提供情绪记录、心理量表自评、正念冥想与专业心理咨询师对接的心理健康陪伴 App。本地优先、隐私至上。" />
-<style>
-  :root{
-    --bg:#0c0a14; --bg2:#120e1f; --card:rgba(255,255,255,.04); --card-line:rgba(255,255,255,.09);
-    --text:#F2EEFB; --sub:#A99FC8; --brand:#8B5CF6; --brand2:#A78BFA; --brand3:#C4B5FD;
-    --pink:#F0ABFC; --sky:#7DD3FC; --orange:#FDBA74; --green:#6EE7B7; --radius:22px;
-    --maxw:1080px; --ease:cubic-bezier(.16,1,.3,1);
-  }
-  [data-theme="light"]{
-    --bg:#F6F4FB; --bg2:#EFEAFB; --card:rgba(20,12,40,.04); --card-line:rgba(20,12,40,.10);
-    --text:#1B1430; --sub:#5B5276; --brand:#7C3AED; --brand2:#8B5CF6; --brand3:#6D28D9;
-    --pink:#DB2777; --sky:#0EA5E9; --orange:#EA580C; --green:#059669;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
-    line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background .4s var(--ease),color .4s var(--ease)}
-  /* 背景光晕 */
-  .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-  .aurora span{position:absolute;border-radius:50%;filter:blur(80px);opacity:.5;animation:float 16s var(--ease) infinite}
-  .aurora .a1{width:520px;height:520px;background:radial-gradient(circle,#8B5CF6,transparent 70%);top:-160px;right:-120px}
-  .aurora .a2{width:420px;height:420px;background:radial-gradient(circle,#F0ABFC,transparent 70%);bottom:-120px;left:-120px;animation-delay:-6s}
-  .aurora .a3{width:360px;height:360px;background:radial-gradient(circle,#7DD3FC,transparent 70%);top:40%;left:60%;animation-delay:-11s}
-  @keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(0,40px) scale(1.08)}}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px;position:relative;z-index:1}
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>时安 - 你的专属心理陪伴空间</title>
+  <meta name="description" content="时安是一款心理健康陪伴应用，提供心情日记、树洞社区、专业咨询、量表测评、正念冥想等功能，在温柔中认识自己。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- AOS：滚动入场动效（与参考模板同款 reveal 风格） -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#F8F6FB',
+              100: '#EDE8F5',
+              200: '#DDD4ED',
+              300: '#C4B0D4',
+              400: '#A78BCE',
+              500: '#8E6AB8',
+              600: '#7C5BA8',
+              700: '#6A4C8F',
+              800: '#573D76',
+              900: '#442F5D',
+            },
+          },
+          fontFamily: {
+            sans: ['"Noto Sans SC"', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .phone-shadow { box-shadow: 0 25px 60px -12px rgba(124, 91, 168, 0.25); }
+    .card-shadow { box-shadow: 0 8px 30px -8px rgba(124, 91, 168, 0.12); }
 
-  /* 导航 */
-  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px) saturate(160%);background:color-mix(in srgb,var(--bg) 72%,transparent);
-    border-bottom:1px solid var(--card-line)}
-  .nav-in{max-width:var(--maxw);margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
-  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-.3px}
-  .logo .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--pink));display:grid;place-items:center;font-size:16px;box-shadow:0 8px 24px -8px var(--brand)}
-  .nav-links{display:flex;gap:26px;font-size:14.5px}
-  .nav-links a{color:var(--sub);text-decoration:none;transition:color .25s}
-  .nav-links a:hover{color:var(--text)}
-  .nav-cta{display:flex;align-items:center;gap:12px}
-  .theme-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--card-line);background:var(--card);color:var(--text);cursor:pointer;font-size:16px;transition:transform .25s var(--ease),border-color .25s}
-  .theme-btn:hover{transform:translateY(-2px);border-color:var(--brand2)}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:13px;border:none;cursor:pointer;font-size:14.5px;font-weight:700;text-decoration:none;transition:transform .25s var(--ease),box-shadow .25s,filter .25s}
-  .btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 12px 34px -12px var(--brand)}
-  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 44px -12px var(--brand);filter:brightness(1.06)}
-  .btn-ghost{background:var(--card);border:1px solid var(--card-line);color:var(--text)}
-  .btn-ghost:hover{transform:translateY(-3px);border-color:var(--brand2)}
+    /* 悬浮抬升：卡片 hover 微动效 */
+    .lift {
+      transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease;
+    }
+    .lift:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 45px -10px rgba(124, 91, 168, 0.22);
+    }
 
-  /* Hero */
-  header.hero{padding:84px 0 64px;text-align:center}
-  .badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--brand3);background:var(--card);border:1px solid var(--card-line);padding:7px 14px;border-radius:999px;margin-bottom:22px}
-  .badge .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 30%,transparent)}
-  h1{font-size:clamp(34px,6vw,58px);line-height:1.08;font-weight:850;letter-spacing:-1.5px;margin-bottom:18px}
-  h1 .grad{background:linear-gradient(110deg,var(--brand2),var(--pink) 60%,var(--sky));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .hero p.sub{max-width:620px;margin:0 auto 32px;font-size:clamp(15px,2.4vw,18px);color:var(--sub)}
-  .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
-  .hero-note{font-size:13px;color:var(--sub)}
-  /* Hero 视觉：安禾 IP 抽象球 */
-  .hero-orb{width:min(340px,80vw);height:min(340px,80vw);margin:46px auto 0;position:relative;display:grid;place-items:center}
-  .hero-orb .ring{position:absolute;inset:0;border-radius:50%;border:1px solid var(--card-line);animation:spin 26s linear infinite}
-  .hero-orb .ring.r2{inset:26px;animation-direction:reverse;animation-duration:34s;border-color:color-mix(in srgb,var(--brand) 40%,transparent)}
-  .hero-orb .core{width:62%;height:62%;border-radius:50%;background:radial-gradient(circle at 32% 28%,var(--brand2),var(--brand) 55%,#3b1f5e);box-shadow:0 30px 80px -20px var(--brand),inset 0 0 60px rgba(255,255,255,.18);animation:bob 5s var(--ease) infinite}
-  .hero-orb .tail{position:absolute;bottom:14%;left:50%;width:42%;height:42%;background:radial-gradient(circle,var(--sky),transparent 70%);border-radius:50%;transform:translateX(-50%);opacity:.7;filter:blur(2px)}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+    /* Hero 手机轻微浮动 */
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    .floaty { animation: floaty 6s ease-in-out infinite; }
 
-  /* 通用 section */
-  section.block{padding:72px 0}
-  .eyebrow{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brand2);margin-bottom:12px}
-  h2.title{font-size:clamp(26px,4vw,38px);font-weight:820;letter-spacing:-1px;margin-bottom:14px}
-  .lead2{max-width:640px;color:var(--sub);font-size:16px;margin-bottom:40px}
+    /* 回到顶部按钮 */
+    #toTop {
+      transition: opacity .3s ease, transform .3s ease;
+    }
 
-  /* 功能网格 */
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .card{background:var(--card);border:1px solid var(--card-line);border-radius:var(--radius);padding:24px;transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;opacity:0;transform:translateY(26px)}
-  .card.in{opacity:1;transform:none}
-  .card:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--brand) 55%,transparent);box-shadow:0 24px 60px -28px var(--brand)}
-  .card .ico{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:22px;margin-bottom:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--brand) 30%,transparent),transparent)}
-  .card h3{font-size:18px;font-weight:750;margin-bottom:8px}
-  .card p{font-size:14px;color:var(--sub)}
+    /* ===== iPhone 17 Pro 手机壳 mockup ===== */
+    .iphone17 {
+      position: relative;
+      display: inline-block;
+      font-size: 16px;
+      background:
+        linear-gradient(165deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 40%),
+        linear-gradient(160deg, #F2F0EC 0%, #C9C4BC 25%, #E6E3DC 50%, #ABA69D 75%, #DDDAD3 100%);
+      padding: 0.75em;
+      border-radius: 3.2em;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.45),
+        inset 0 0 0.4em rgba(0,0,0,0.10),
+        0 1.75em 4.4em -0.9em rgba(0,0,0,0.28),
+        0 0.6em 1.4em -0.35em rgba(0,0,0,0.12);
+      transition: transform .4s cubic-bezier(.22,.61,.36,1), box-shadow .4s ease;
+      vertical-align: middle;
+    }
+    .iphone17-hover:hover {
+      transform: translateY(-8px) rotate(1.2deg);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.45),
+        inset 0 0 0.4em rgba(0,0,0,0.10),
+        0 2.4em 6em -0.8em rgba(0,0,0,0.32),
+        0 1em 2.2em -0.3em rgba(0,0,0,0.14);
+    }
+    .iphone17-screen {
+      position: relative;
+      border-radius: 2.55em;
+      overflow: hidden;
+      background: #000;
+      line-height: 0;
+    }
+    .iphone17-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 2.55em;
+      box-shadow: inset 0 0 0 0.15em rgba(0,0,0,0.35);
+      pointer-events: none;
+      z-index: 10;
+    }
+    .iphone17-notch {
+      position: absolute;
+      top: 0.85em;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5.5em;
+      height: 1.35em;
+      background: #000;
+      border-radius: 999px;
+      z-index: 20;
+    }
+    .iphone17-home-bar {
+      position: absolute;
+      bottom: 0.5em;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5em;
+      height: 0.3em;
+      background: rgba(255,255,255,0.72);
+      border-radius: 999px;
+      z-index: 20;
+    }
+    .iphone17-buttons {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .iphone17-buttons::before,
+    .iphone17-buttons::after {
+      content: '';
+      position: absolute;
+      background: linear-gradient(180deg, #D5D1CA, #B5B0A7);
+      border-radius: 0.2em;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
+    }
+    .iphone17-buttons::before {
+      left: -0.22em;
+      top: 5.5em;
+      width: 0.22em;
+      height: 3em;
+    }
+    .iphone17-buttons::after {
+      right: -0.22em;
+      top: 6.5em;
+      width: 0.22em;
+      height: 4em;
+    }
 
-  /* 信任 / 合规 */
-  .trust{background:linear-gradient(135deg,color-mix(in srgb,var(--brand) 16%,transparent),color-mix(in srgb,var(--sky) 10%,transparent));border:1px solid var(--card-line);border-radius:28px;padding:44px;display:grid;grid-template-columns:1.1fr 1fr;gap:36px;align-items:center}
-  .trust ul{list-style:none;margin-top:18px}
-  .trust li{display:flex;gap:12px;align-items:flex-start;margin:14px 0;font-size:15px;color:var(--text)}
-  .trust li .ck{color:var(--green);font-weight:800;flex-shrink:0}
-  .trust .pills{display:flex;flex-wrap:wrap;gap:10px}
-  .pill{font-size:13px;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--card-line);color:var(--brand3)}
+    /* FAQ 手风琴 */
+    .faq-btn[aria-expanded="true"] .faq-chevron {
+      transform: rotate(180deg);
+    }
 
-  /* 数据看板式统计条 */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
-  .stat{background:var(--card);border:1px solid var(--card-line);border-radius:18px;padding:22px;text-align:center}
-  .stat .n{font-size:30px;font-weight:850;background:linear-gradient(120deg,var(--brand2),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .stat .l{font-size:13px;color:var(--sub);margin-top:4px}
+    /* 数字滚动计数器 */
+    .stat-number {
+      font-variant-numeric: tabular-nums;
+    }
 
-  /* 下载 CTA */
-  .download{text-align:center;background:linear-gradient(135deg,#2a1d4d,#3b1f5e);border:1px solid var(--card-line);border-radius:30px;padding:60px 28px;position:relative;overflow:hidden}
-  .download h2{color:#fff}
-  .download p{color:#C9BEE8;max-width:520px;margin:0 auto 30px}
-  .store-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+    /* 导航当前项高亮 */
+    .nav-link.active {
+      color: #7C5BA8;
+      font-weight: 500;
+    }
 
-  /* 页脚 */
-  footer{border-top:1px solid var(--card-line);padding:42px 0 60px;margin-top:30px}
-  .foot-in{max-width:var(--maxw);margin:0 auto;padding:0 22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px}
-  .foot-in .col h4{font-size:14px;margin-bottom:12px;color:var(--text)}
-  .foot-in .col a{display:block;color:var(--sub);text-decoration:none;font-size:13.5px;margin:7px 0;transition:color .2s}
-  .foot-in .col a:hover{color:var(--brand2)}
-  .copy{width:100%;text-align:center;color:var(--sub);font-size:12.5px;margin-top:30px}
-
-  /* reveal */
-  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-  .reveal.in{opacity:1;transform:none}
-
-  @media(max-width:860px){
-    .grid{grid-template-columns:repeat(2,1fr)}
-    .trust{grid-template-columns:1fr;padding:30px}
-    .stats{grid-template-columns:repeat(2,1fr)}
-    .nav-links{display:none}
-  }
-  @media(max-width:560px){
-    .grid{grid-template-columns:1fr}
-    header.hero{padding:54px 0 40px}
-  }
-</style>
+    /* 尊重用户的减少动效偏好 */
+    @media (prefers-reduced-motion: reduce) {
+      [data-aos] { opacity: 1 !important; transform: none !important; }
+      .floaty { animation: none; }
+      .iphone17-hover:hover { transform: none; }
+    }
+  </style>
 </head>
-<body>
-<div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+<body class="font-sans text-gray-900 bg-brand-50 antialiased" x-data="{ open: false }">
 
-<nav>
-  <div class="nav-in">
-    <div class="logo"><span class="mark">🏝️</span> 安禾 <span style="color:var(--sub);font-weight:600;font-size:13px">Anhe</span></div>
-    <div class="nav-links">
-      <a href="#features">功能</a>
-      <a href="#trust">安全合规</a>
-      <a href="#data">关于数据</a>
-      <a href="#download">下载</a>
-    </div>
-    <div class="nav-cta">
-      <button class="theme-btn" id="themeToggle" aria-label="切换主题">🌙</button>
-      <a href="#download" class="btn btn-primary">免费下载</a>
-    </div>
-  </div>
-</nav>
+  <!-- Header -->
+  <header id="siteHeader" class="fixed top-0 inset-x-0 z-50 bg-brand-50/90 backdrop-blur-md border-b border-brand-100 transition-shadow duration-300">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="#" class="flex items-center gap-2.5 group">
+          <img src="images/anan-growing-happy.png" alt="时安 IP 安安" class="h-10 w-10 object-contain rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+          <span class="text-2xl font-bold text-brand-600 tracking-tight">时安</span>
+        </a>
 
-<header class="hero">
-  <div class="wrap">
-    <div class="badge reveal"><span class="dot"></span> 本地优先 · 隐私至上 · 专业心理陪伴</div>
-    <h1 class="reveal">陪你安放<br><span class="grad">每一种情绪</span></h1>
-    <p class="sub reveal">安禾是一款温柔的心理健康陪伴 App：记录心情、做专业心理量表自评、跟练正念冥想，也能一键预约持证心理咨询师。你的数据默认只属于你。</p>
-    <div class="hero-cta reveal">
-      <a href="#download" class="btn btn-primary">⬇ 立即下载</a>
-      <a href="#features" class="btn btn-ghost">了解功能</a>
-    </div>
-    <p class="hero-note reveal">iOS / Android 双端 · 无需注册即可开始记录</p>
-    <div class="hero-orb reveal" aria-hidden="true">
-      <div class="ring"></div><div class="ring r2"></div>
-      <div class="tail"></div>
-      <div class="core"></div>
-    </div>
-  </div>
-</header>
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center gap-10">
+          <a href="#features" class="nav-link text-gray-700 hover:text-brand-600 transition">功能</a>
+          <a href="#meditation" class="nav-link text-gray-700 hover:text-brand-600 transition">冥想</a>
+          <a href="#testimonials" class="nav-link text-gray-700 hover:text-brand-600 transition">用户评价</a>
+          <a href="#faq" class="nav-link text-gray-700 hover:text-brand-600 transition">常见问题</a>
+          <a href="#contact" class="nav-link text-gray-700 hover:text-brand-600 transition">联系我们</a>
+        </nav>
 
-<section class="block" id="features">
-  <div class="wrap">
-    <div class="eyebrow reveal">CORE FEATURES</div>
-    <h2 class="title reveal">把心理照护，做成日常的小习惯</h2>
-    <p class="lead2 reveal">六个有机整合的模块，从自我觉察到专业支持，陪你走完每一段情绪旅程。</p>
-    <div class="grid">
-      <div class="card"><div class="ico">🌤️</div><h3>心情记录</h3><p>每天 30 秒记下当下情绪，本周曲线与 AI 小结帮你看见自己的节奏。</p></div>
-      <div class="card"><div class="ico">📋</div><h3>心理量表自评</h3><p>PHQ-9、GAD-7 等临床常用量表，标准计分与解读，帮你看清状态变化。</p></div>
-      <div class="card"><div class="ico">🧘</div><h3>正念冥想</h3><p>呼吸练习、助眠白噪音与引导冥想，随时给紧绷的神经松一口气。</p></div>
-      <div class="card"><div class="ico">💬</div><h3>持证咨询师</h3><p>按真实日期与半小时档自主预约，咨询师档期透明，付费后可确认。</p></div>
-      <div class="card"><div class="ico">🤖</div><h3>AI 温柔陪伴</h3><p>随时倾诉的 AI 倾听者，本地优先运行，做你深夜也能开口的安全树洞。</p></div>
-      <div class="card"><div class="ico">🫂</div><h3>匿名互助社区</h3><p>不暴露身份，和同路人互相取暖。敏感内容经温柔引导，避免二次伤害。</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="block" id="trust" style="padding-top:0">
-  <div class="wrap">
-    <div class="trust reveal">
-      <div>
-        <div class="eyebrow">SAFE & COMPLIANT</div>
-        <h2 class="title" style="font-size:clamp(24px,3.4vw,32px)">你的隐私，是底线不是选项</h2>
-        <ul>
-          <li><span class="ck">✓</span><div><b>本地优先存储</b>：心情、日记、测评默认只存在你的设备，不上传云端。</div></li>
-          <li><span class="ck">✓</span><div><b>HealthKit 严守规范</b>：绝不用于广告或转售，仅在本 App 内做情绪—身心关联分析。</div></li>
-          <li><span class="ck">✓</span><div><b>完全可导出 / 可删除</b>：一键导出全部数据，或随时抹除本地记录。</div></li>
-          <li><span class="ck">✓</span><div><b>不构成医疗诊断</b>：所有内容均为辅助，紧急情况引导你联系专业援助。</div></li>
-        </ul>
-      </div>
-      <div>
-        <div class="pills">
-          <span class="pill">🔒 端侧优先</span>
-          <span class="pill">🍎 HealthKit 合规</span>
-          <span class="pill">📤 数据可携带</span>
-          <span class="pill">🗑️ 一键清除</span>
-          <span class="pill">🛡️ 匿名社区</span>
-          <span class="pill">⚕️ 持证咨询</span>
+        <div class="hidden md:block">
+          <a href="#cta" class="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-brand-600 text-white font-medium hover:bg-brand-700 transition">
+            下载 App
+          </a>
         </div>
-        <p style="color:var(--sub);font-size:14px;margin-top:18px">我们遵循 Apple《HealthKit 隐私政策》与 App Store 审核指南 5.1.3，并把完整条款写进<a href="privacy.html" style="color:var(--brand2)">隐私政策</a>与<a href="terms.html" style="color:var(--brand2)">用户协议</a>。</p>
+
+        <!-- Mobile menu button -->
+        <button class="md:hidden p-2 text-gray-700" @click="open = !open" aria-label="切换菜单">
+          <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
       </div>
     </div>
-  </div>
-</section>
 
-<section class="block" id="data" style="padding-top:0">
-  <div class="wrap">
-    <div class="eyebrow reveal">WHY ANHE</div>
-    <h2 class="title reveal">为什么越来越多人选择安禾</h2>
-    <p class="lead2 reveal">不是又一个打卡工具，而是一套真正懂情绪的陪伴系统。</p>
-    <div class="stats">
-      <div class="stat reveal"><div class="n">6+</div><div class="l">有机整合模块</div></div>
-      <div class="stat reveal"><div class="n">100%</div><div class="l">本地优先数据</div></div>
-      <div class="stat reveal"><div class="n">30s</div><div class="l">极简心情记录</div></div>
-      <div class="stat reveal"><div class="n">0</div><div class="l">强制广告追踪</div></div>
-    </div>
-  </div>
-</section>
-
-<section class="block" id="download" style="padding-top:0">
-  <div class="wrap">
-    <div class="download reveal">
-      <h2>把这个温柔的角落，装进口袋</h2>
-      <p>现在下载安禾，从今天的第一条心情开始。无需付费，先记录、先觉察。</p>
-      <div class="store-row">
-        <a href="#" class="btn btn-primary"> App Store 下载</a>
-        <a href="#" class="btn btn-ghost"> Android 下载</a>
-        <a href="#" class="btn btn-ghost"> TestFlight 内测</a>
+    <!-- Mobile Nav -->
+    <div x-show="open" x-transition class="md:hidden border-t border-brand-100 bg-white">
+      <div class="px-6 py-4 space-y-3">
+        <a href="#features" @click="open = false" class="block text-gray-700 hover:text-brand-600">功能</a>
+        <a href="#meditation" @click="open = false" class="block text-gray-700 hover:text-brand-600">冥想</a>
+        <a href="#testimonials" @click="open = false" class="block text-gray-700 hover:text-brand-600">用户评价</a>
+        <a href="#faq" @click="open = false" class="block text-gray-700 hover:text-brand-600">常见问题</a>
+        <a href="#contact" @click="open = false" class="block text-gray-700 hover:text-brand-600">联系我们</a>
+        <a href="#cta" @click="open = false" class="inline-flex items-center justify-center w-full px-6 py-2.5 rounded-full bg-brand-600 text-white font-medium">下载 App</a>
       </div>
     </div>
-  </div>
-</section>
+  </header>
 
-<footer>
-  <div class="foot-in">
-    <div class="col" style="max-width:280px">
-      <div class="logo" style="margin-bottom:10px"><span class="mark">🏝️</span> 安禾</div>
-      <p style="color:var(--sub);font-size:13.5px">一款温柔的心理健康陪伴 App。陪你记录、觉察，并在需要时接住你。</p>
+  <main>
+    <!-- Hero -->
+    <section class="relative pt-32 pb-20 lg:pt-44 lg:pb-32 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div class="max-w-2xl">
+            <span data-aos="fade-up" class="inline-flex items-center px-4 py-1.5 rounded-full bg-brand-100 text-brand-700 text-sm font-medium mb-6">
+              心理健康陪伴应用
+            </span>
+            <h1 data-aos="fade-up" data-aos-delay="100" class="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+              在温柔中，<br />认识自己
+            </h1>
+            <p data-aos="fade-up" data-aos-delay="200" class="text-lg lg:text-xl text-gray-600 leading-relaxed mb-8">
+              时安是你的专属心理空间：记录心情、倾诉心事、正念冥想、专业咨询、科学测评，随时随地给自己一份温柔。
+            </p>
+            <div data-aos="fade-up" data-aos-delay="300" class="flex flex-wrap gap-4">
+              <a href="#cta" class="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand-600 text-white font-semibold text-lg hover:bg-brand-700 transition shadow-lg shadow-brand-200">
+                下载 App
+              </a>
+              <a href="#features" class="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white text-brand-700 font-semibold text-lg border border-brand-200 hover:bg-brand-50 transition">
+                了解功能
+              </a>
+            </div>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="200" class="relative flex justify-center lg:justify-end">
+            <div class="iphone17 iphone17-hover floaty" style="font-size:18px;">
+              <div class="iphone17-buttons"></div>
+              <div class="iphone17-screen">
+                <div class="iphone17-notch"></div>
+                <img src="images/home.jpg" alt="时安 App 首页" class="w-[280px] lg:w-[320px]" />
+                <div class="iphone17-home-bar"></div>
+              </div>
+            </div>
+            <div class="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] rounded-full bg-brand-200/40 blur-3xl"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core Features -->
+    <section id="features" class="py-20 lg:py-32 bg-white">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16 lg:mb-24">
+          <h2 data-aos="fade-up" class="text-3xl lg:text-5xl font-bold text-gray-900 mb-4">核心功能</h2>
+          <p data-aos="fade-up" data-aos-delay="100" class="text-lg text-gray-600">从记录到倾诉，从测评到咨询，时安陪你走过每一步</p>
+        </div>
+
+        <!-- Feature 1 -->
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-20 lg:mb-28">
+          <div class="order-2 lg:order-1" data-aos="fade-up">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-100 text-brand-700 text-xl font-bold mb-6">记</div>
+            <h3 class="text-2xl lg:text-4xl font-bold text-gray-900 mb-4">心情日记</h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              看见情绪，也是照顾自己的一部分。用周图表追踪心情起伏，用月历回顾情绪轨迹，让每一次记录都成为自我关怀的开始。
+            </p>
+          </div>
+          <div class="order-1 lg:order-2 flex justify-center" data-aos="fade-up" data-aos-delay="150">
+            <div class="iphone17 iphone17-hover" style="font-size:16px;">
+              <div class="iphone17-buttons"></div>
+              <div class="iphone17-screen">
+                <div class="iphone17-notch"></div>
+                <img src="images/mood.jpg" alt="心情日记" class="w-[260px] lg:w-[300px]" />
+                <div class="iphone17-home-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-20 lg:mb-28">
+          <div class="flex justify-center" data-aos="fade-up">
+            <div class="iphone17 iphone17-hover" style="font-size:16px;">
+              <div class="iphone17-buttons"></div>
+              <div class="iphone17-screen">
+                <div class="iphone17-notch"></div>
+                <img src="images/community.jpg" alt="树洞社区" class="w-[260px] lg:w-[300px]" />
+                <div class="iphone17-home-bar"></div>
+              </div>
+            </div>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="150">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-100 text-brand-700 text-xl font-bold mb-6">树</div>
+            <h3 class="text-2xl lg:text-4xl font-bold text-gray-900 mb-4">树洞社区</h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              匿名倾诉，彼此陪伴。在安全的树洞里说出心事，收获来自陌生人的温暖回应，让孤独被看见、被接纳。
+            </p>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div class="order-2 lg:order-1" data-aos="fade-up">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-100 text-brand-700 text-xl font-bold mb-6">咨</div>
+            <h3 class="text-2xl lg:text-4xl font-bold text-gray-900 mb-4">专业咨询</h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              每一次倾诉，都是给自己的一份温柔。认证心理咨询师在线预约，按专长与需求匹配，让专业支持触手可及。
+            </p>
+          </div>
+          <div class="order-1 lg:order-2 flex justify-center" data-aos="fade-up" data-aos-delay="150">
+            <div class="iphone17 iphone17-hover" style="font-size:16px;">
+              <div class="iphone17-buttons"></div>
+              <div class="iphone17-screen">
+                <div class="iphone17-notch"></div>
+                <img src="images/consultation.jpg" alt="专业咨询" class="w-[260px] lg:w-[300px]" />
+                <div class="iphone17-home-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Secondary Features -->
+    <section class="py-20 lg:py-32 bg-brand-50">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 data-aos="fade-up" class="text-3xl lg:text-5xl font-bold text-gray-900 mb-4">更多温柔功能</h2>
+          <p data-aos="fade-up" data-aos-delay="100" class="text-lg text-gray-600">每一个小功能，都是对自己的一份关照</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div data-aos="fade-up" data-aos-delay="0" class="lift bg-white rounded-3xl p-8 card-shadow text-center">
+            <div class="iphone17 iphone17-hover mx-auto mb-5" style="font-size:10px;">
+              <div class="iphone17-buttons"></div>
+              <div class="iphone17-screen">
+                <div class="iphone17-notch"></div>
+                <img src="images/scale.jpg" alt="量表测评" class="w-28" />
+                <div class="iphone17-home-bar"></div>
+              </div>
+            </div>
+            <h4 class="text-xl font-bold text-gray-900 mb-2">量表测评</h4>
+            <p class="text-gray-600">200+ 专业心理量表，科学了解内心世界</p>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="100" class="lift bg-white rounded-3xl p-8 card-shadow">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-100 text-brand-700 text-lg font-bold mb-5">警</div>
+            <h4 class="text-xl font-bold text-gray-900 mb-2">身心预警</h4>
+            <p class="text-gray-600">连接健康数据，解锁更全面的身心预警</p>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="200" class="lift bg-white rounded-3xl p-8 card-shadow">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-100 text-brand-700 text-lg font-bold mb-5">手</div>
+            <h4 class="text-xl font-bold text-gray-900 mb-2">情绪手账</h4>
+            <p class="text-gray-600">记录每一刻真实感受，留下情绪足迹</p>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="300" class="lift bg-white rounded-3xl p-8 card-shadow">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-brand-100 text-brand-700 text-lg font-bold mb-5">安</div>
+            <h4 class="text-xl font-bold text-gray-900 mb-2">安安陪伴</h4>
+            <p class="text-gray-600">可爱 IP 安安伴你成长，打卡不再孤单</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Meditation teaser -->
+    <section id="meditation" class="py-20 lg:py-32 bg-white">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div data-aos="fade-up">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-100 text-brand-700 text-xl font-bold mb-6">冥</div>
+            <h3 class="text-2xl lg:text-4xl font-bold text-gray-900 mb-4">正念冥想</h3>
+            <p class="text-lg text-gray-600 leading-relaxed">
+              三分钟，回到呼吸里。入睡引导、焦虑缓解、专注呼吸、身体扫描，跟着安安一起，把紧绷慢慢松下来。
+            </p>
+            <div class="mt-8">
+              <a href="#cta" class="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand-600 text-white font-semibold text-lg hover:bg-brand-700 transition shadow-lg shadow-brand-200">
+                开始一次冥想
+              </a>
+            </div>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="150" class="flex justify-center">
+            <!-- 呼吸圆环示意 -->
+            <div class="relative w-64 h-64 flex items-center justify-center">
+              <div class="absolute inset-0 rounded-full bg-brand-200/50 blur-2xl"></div>
+              <div class="w-48 h-48 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white">
+                <div class="text-center">
+                  <div class="text-sm opacity-90">正在呼吸</div>
+                  <div class="text-3xl font-bold tracking-widest">4 · 7 · 8</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 lg:py-32 bg-brand-50">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 data-aos="fade-up" class="text-3xl lg:text-5xl font-bold text-gray-900 mb-4">用户评价</h2>
+          <p data-aos="fade-up" data-aos-delay="100" class="text-lg text-gray-600">听听他们怎么说</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
+          <div data-aos="fade-up" data-aos-delay="0" class="bg-white rounded-3xl p-8 card-shadow">
+            <p class="text-gray-800 leading-relaxed mb-6">
+              「每天睡前记一笔心情，已经成了我照顾自己的仪式。看到自己一周的情绪变化，会更容易理解和接纳自己。」
+            </p>
+            <p class="text-sm text-gray-500">— 小林，25 岁</p>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="150" class="bg-white rounded-3xl p-8 card-shadow">
+            <p class="text-gray-800 leading-relaxed mb-6">
+              「在树洞社区里第一次把憋了很久的话说出来，收到了很多温暖的回复。原来我不是一个人。」
+            </p>
+            <p class="text-sm text-gray-500">— 阿杰，28 岁</p>
+          </div>
+          <div data-aos="fade-up" data-aos-delay="300" class="bg-white rounded-3xl p-8 card-shadow">
+            <p class="text-gray-800 leading-relaxed mb-6">
+              「通过量表测评和咨询师的建议，我更清楚自己焦虑的来源了。专业、私密、让人安心。」
+            </p>
+            <p class="text-sm text-gray-500">— 悠悠，31 岁</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats 数字滚动 -->
+    <section class="py-16 lg:py-24 bg-white">
+      <div class="max-w-6xl mx-auto px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 text-center" x-data="{ counters: [
+          { target: 10, suffix: '万+', label: '温暖用户' },
+          { target: 200, suffix: '+', label: '专业量表' },
+          { target: 98, suffix: '%', label: '用户好评' }
+        ] }">
+          <template x-for="(c, i) in counters" :key="i">
+            <div x-data="counter(c.target, c.suffix)" x-intersect.once="start()" data-aos="fade-up" :data-aos-delay="i * 100">
+              <div class="stat-number text-4xl lg:text-5xl font-bold text-brand-600 mb-2" x-text="display"></div>
+              <div class="text-gray-600" x-text="c.label"></div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ 手风琴 -->
+    <section id="faq" class="py-20 lg:py-32 bg-brand-50">
+      <div class="max-w-3xl mx-auto px-6 lg:px-8">
+        <div class="text-center mb-12 lg:mb-16">
+          <h2 data-aos="fade-up" class="text-3xl lg:text-5xl font-bold text-gray-900 mb-4">常见问题</h2>
+          <p data-aos="fade-up" data-aos-delay="100" class="text-lg text-gray-600">关于时安，你可能想知道的</p>
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="150" class="bg-white rounded-3xl card-shadow overflow-hidden" x-data="{ open: 1 }">
+          <div class="border-b border-brand-100">
+            <button class="faq-btn w-full flex items-center justify-between px-6 py-5 text-left hover:bg-brand-50/50 transition" @click="open = open === 1 ? 0 : 1" :aria-expanded="open === 1 ? 'true' : 'false'">
+              <span class="font-semibold text-gray-900">时安适合什么样的人使用？</span>
+              <svg class="faq-chevron w-5 h-5 text-brand-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div x-show="open === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-5 text-gray-600 leading-relaxed">
+              时安适合希望更好了解自己情绪、需要安全倾诉空间，或想要通过冥想与专业支持改善心理状态的人。无论你是想记录心情、找人倾诉，还是寻求专业咨询，时安都愿意陪你一起。
+            </div>
+          </div>
+          <div class="border-b border-brand-100">
+            <button class="faq-btn w-full flex items-center justify-between px-6 py-5 text-left hover:bg-brand-50/50 transition" @click="open = open === 2 ? 0 : 2" :aria-expanded="open === 2 ? 'true' : 'false'">
+              <span class="font-semibold text-gray-900">咨询师都是专业的吗？</span>
+              <svg class="faq-chevron w-5 h-5 text-brand-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div x-show="open === 2" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-5 text-gray-600 leading-relaxed">
+              是的。入驻时安的咨询师均经过资质审核，具备国家认可的心理咨询或相关执业资格。你可以根据专长、风格和需求，选择最适合自己的咨询师。
+            </div>
+          </div>
+          <div class="border-b border-brand-100">
+            <button class="faq-btn w-full flex items-center justify-between px-6 py-5 text-left hover:bg-brand-50/50 transition" @click="open = open === 3 ? 0 : 3" :aria-expanded="open === 3 ? 'true' : 'false'">
+              <span class="font-semibold text-gray-900">我的隐私数据安全吗？</span>
+              <svg class="faq-chevron w-5 h-5 text-brand-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div x-show="open === 3" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-5 text-gray-600 leading-relaxed">
+              安全是我们的底线。你的日记、倾诉内容与咨询记录均经过加密存储，树洞社区默认匿名。我们严格遵守相关法律法规，未经你同意不会向第三方分享个人数据。
+            </div>
+          </div>
+          <div class="border-b border-brand-100">
+            <button class="faq-btn w-full flex items-center justify-between px-6 py-5 text-left hover:bg-brand-50/50 transition" @click="open = open === 4 ? 0 : 4" :aria-expanded="open === 4 ? 'true' : 'false'">
+              <span class="font-semibold text-gray-900">冥想功能需要付费吗？</span>
+              <svg class="faq-chevron w-5 h-5 text-brand-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div x-show="open === 4" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-5 text-gray-600 leading-relaxed">
+              时安提供丰富的基础冥想内容，包括呼吸练习、入睡引导和短时放松，均可免费使用。部分进阶课程与专题引导属于会员权益，可按需订阅。
+            </div>
+          </div>
+          <div>
+            <button class="faq-btn w-full flex items-center justify-between px-6 py-5 text-left hover:bg-brand-50/50 transition" @click="open = open === 5 ? 0 : 5" :aria-expanded="open === 5 ? 'true' : 'false'">
+              <span class="font-semibold text-gray-900">如何联系客服或反馈问题？</span>
+              <svg class="faq-chevron w-5 h-5 text-brand-600 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div x-show="open === 5" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="px-6 pb-5 text-gray-600 leading-relaxed">
+              你可以在 App 内「我的 - 帮助与反馈」中直接留言，也可以发送邮件至 maple593@163.com，我们会在 1-2 个工作日内回复你。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="py-20 lg:py-28 bg-brand-600" data-aos="zoom-in">
+      <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+        <h2 class="text-3xl lg:text-5xl font-bold text-white mb-4">下载时安，开启你的心理关怀之旅</h2>
+        <p class="text-lg lg:text-xl text-brand-100 mb-10">
+          记录、倾诉、冥想、咨询、测评，从这一刻开始温柔对待自己
+        </p>
+        <a href="#" class="inline-flex items-center justify-center px-10 py-4 rounded-full bg-white text-brand-700 font-bold text-lg hover:bg-brand-50 transition shadow-xl">
+          立即下载
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer id="contact" class="bg-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+      <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div class="lg:col-span-2">
+          <a href="#" class="flex items-center gap-2.5 group">
+            <img src="images/anan-growing-happy.png" alt="时安 IP 安安" class="h-8 w-8 object-contain rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+            <span class="text-2xl font-bold">时安</span>
+          </a>
+          <p class="mt-4 text-gray-400 max-w-xs">你的专属心理陪伴空间</p>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">产品</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#features" class="hover:text-white transition">功能介绍</a></li>
+            <li><a href="#meditation" class="hover:text-white transition">正念冥想</a></li>
+            <li><a href="#testimonials" class="hover:text-white transition">用户评价</a></li>
+            <li><a href="#cta" class="hover:text-white transition">下载 App</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">支持</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="help.html" class="hover:text-white transition">帮助中心</a></li>
+            <li><a href="privacy.html" class="hover:text-white transition">隐私政策</a></li>
+            <li><a href="terms.html" class="hover:text-white transition">用户协议</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">联系</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="mailto:maple593@163.com" class="hover:text-white transition">maple593@163.com</a></li>
+            <li>微信公众号：时安心理</li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm">
+        <p>Copyright 2026 时安 Shian. All rights reserved.</p>
+      </div>
     </div>
-    <div class="col"><h4>产品</h4><a href="#features">功能介绍</a><a href="#trust">安全合规</a><a href="#download">下载</a></div>
-    <div class="col"><h4>法律</h4><a href="privacy.html">隐私政策</a><a href="terms.html">用户协议</a><a href="mailto:privacy@anhe.app">联系我们</a></div>
-    <div class="col"><h4>支持</h4><a href="mailto:support@anhe.app">问题反馈</a><a href="#features">使用指南</a></div>
-  </div>
-  <div class="copy">© 2026 安禾 Anhe · 本应用提供辅助功能，不构成医疗诊断。如遇紧急心理危机，请拨打全国心理援助热线 400-161-9995。</div>
-</footer>
+  </footer>
 
-<script>
-  // 主题切换（记忆到 localStorage）
-  (function(){
-    var root=document.documentElement, btn=document.getElementById('themeToggle');
-    var saved=localStorage.getItem('hi-site-theme')||'dark';
-    apply(saved);
-    function apply(t){root.setAttribute('data-theme',t);btn.textContent=t==='dark'?'🌙':'☀️';}
-    btn.addEventListener('click',function(){var next=root.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('hi-site-theme',next);apply(next);});
-  })();
-  // 滚动渐显
-  (function(){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
-    document.querySelectorAll('.reveal,.card').forEach(function(el){io.observe(el);});
-  })();
-</script>
+  <!-- 回到顶部 -->
+  <button
+    id="toTop"
+    x-data="{ show: false }"
+    @scroll.window="show = window.scrollY > 400"
+    x-show="show"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 translate-y-3"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    @click="window.scrollTo({ top: 0, behavior: 'smooth' })"
+    class="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-brand-600 text-white shadow-lg shadow-brand-300/40 flex items-center justify-center hover:bg-brand-700 transition"
+    aria-label="回到顶部"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+  </button>
+
+  <!-- AOS 初始化：与参考模板一致的滚动入场动效 -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out-cubic',
+      once: true,
+      offset: 80,
+      delay: 0,
+    });
+
+    // Alpine 数字滚动计数器
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('counter', (target, suffix = '') => ({
+        current: 0,
+        started: false,
+        display: '0' + suffix,
+        start() {
+          if (this.started) return;
+          this.started = true;
+          const duration = 1600;
+          const start = performance.now();
+          const step = (now) => {
+            const p = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+            this.current = Math.floor(eased * target);
+            this.display = this.current + suffix;
+            if (p < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        }
+      }));
+    });
+
+    // Header 滚动阴影 & 导航当前 section 高亮
+    document.addEventListener('DOMContentLoaded', () => {
+      const header = document.getElementById('siteHeader');
+      const navLinks = document.querySelectorAll('.nav-link');
+      const sections = ['features', 'meditation', 'testimonials', 'faq', 'contact'];
+
+      // 滚动时 header 加深阴影
+      const onScroll = () => {
+        if (window.scrollY > 10) {
+          header.classList.add('shadow-sm');
+        } else {
+          header.classList.remove('shadow-sm');
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // 当前 section 高亮
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            navLinks.forEach(link => link.classList.remove('active'));
+            const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+            if (active) active.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    });
+  </script>
 </body>
 </html>

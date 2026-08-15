@@ -1,94 +1,159 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>隐私政策 · 安禾 Anhe</title>
-<meta name="description" content="安禾 Anhe 隐私政策：我们如何收集、使用、存储与保护你的信息，以及你的数据权利。" />
-<style>
-  :root{--bg:#0c0a14;--bg2:#120e1f;--card:rgba(255,255,255,.04);--card-line:rgba(255,255,255,.09);--text:#F2EEFB;--sub:#A99FC8;--brand:#8B5CF6;--brand2:#A78BFA;--pink:#F0ABFC;--radius:22px;--maxw:820px;--ease:cubic-bezier(.16,1,.3,1)}
-  [data-theme="light"]{--bg:#F6F4FB;--bg2:#EFEAFB;--card:rgba(20,12,40,.04);--card-line:rgba(20,12,40,.10);--text:#1B1430;--sub:#5B5276;--brand:#7C3AED;--brand2:#8B5CF6}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75;-webkit-font-smoothing:antialiased;transition:background .4s var(--ease),color .4s var(--ease)}
-  .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-  .aurora span{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45}
-  .aurora .a1{width:480px;height:480px;background:radial-gradient(circle,#8B5CF6,transparent 70%);top:-160px;right:-120px}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px;position:relative;z-index:1}
-  nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px) saturate(160%);background:color-mix(in srgb,var(--bg) 72%,transparent);border-bottom:1px solid var(--card-line)}
-  .nav-in{max-width:var(--maxw);margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
-  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
-  .logo .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--pink));display:grid;place-items:center;font-size:16px}
-  .theme-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--card-line);background:var(--card);color:var(--text);cursor:pointer;font-size:16px}
-  .back{color:var(--brand2);text-decoration:none;font-size:14px}
-  .doc{padding:54px 0 70px}
-  h1{font-size:clamp(28px,5vw,40px);font-weight:850;letter-spacing:-1px;margin-bottom:8px}
-  .meta{color:var(--sub);font-size:13.5px;margin-bottom:34px}
-  h2{font-size:20px;font-weight:780;margin:34px 0 12px;color:var(--text)}
-  p,li{color:var(--sub);font-size:15px}
-  ul,ol{margin:8px 0 8px 22px}
-  li{margin:8px 0}
-  .card{background:var(--card);border:1px solid var(--card-line);border-radius:var(--radius);padding:24px 26px;margin:16px 0}
-  b{color:var(--text)}
-  footer{border-top:1px solid var(--card-line);padding:30px 0 50px;text-align:center;color:var(--sub);font-size:13px}
-  footer a{color:var(--brand2);text-decoration:none}
-</style>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>隐私政策 - 时安</title>
+  <meta name="description" content="时安隐私政策：我们如何收集、使用、存储与保护你的个人信息。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { brand: {
+        50: '#F8F6FB', 100: '#EDE8F5', 200: '#DDD4ED', 300: '#C4B0D4', 400: '#A78BCE',
+        500: '#8E6AB8', 600: '#7C5BA8', 700: '#6A4C8F', 800: '#573D76', 900: '#442F5D' } },
+        fontFamily: { sans: ['"Noto Sans SC"', 'system-ui', 'sans-serif'] } } } };
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .nav-link.active { color: #7C5BA8; font-weight: 500; }
+    @media (prefers-reduced-motion: reduce) { [data-aos] { opacity: 1 !important; transform: none !important; } }
+  </style>
 </head>
-<body>
-<div class="aurora"><span class="a1"></span></div>
-<nav><div class="nav-in">
-  <a class="logo" href="index.html"><span class="mark">🏝️</span> 安禾</a>
-  <div style="display:flex;gap:14px;align-items:center">
-    <a class="back" href="index.html">← 返回首页</a>
-    <button class="theme-btn" id="tt" aria-label="切换主题">🌙</button>
-  </div>
-</div></nav>
+<body class="font-sans text-gray-900 bg-brand-50 antialiased" x-data="{ open: false }">
 
-<div class="wrap doc">
-  <h1>隐私政策</h1>
-  <div class="meta">生效日期：2026 年 8 月 1 日 · 最近更新：2026 年 8 月 7 日</div>
+  <header id="siteHeader" class="fixed top-0 inset-x-0 z-50 bg-brand-50/90 backdrop-blur-md border-b border-brand-100 transition-shadow duration-300">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center gap-2.5 group">
+          <img src="images/anan-growing-happy.png" alt="时安 IP 安安" class="h-10 w-10 object-contain rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+          <span class="text-2xl font-bold text-brand-600 tracking-tight">时安</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-10">
+          <a href="index.html#features" class="nav-link text-gray-700 hover:text-brand-600 transition">功能</a>
+          <a href="index.html#meditation" class="nav-link text-gray-700 hover:text-brand-600 transition">冥想</a>
+          <a href="index.html#testimonials" class="nav-link text-gray-700 hover:text-brand-600 transition">用户评价</a>
+          <a href="help.html" class="nav-link text-gray-700 hover:text-brand-600 transition">帮助中心</a>
+          <a href="index.html#contact" class="nav-link text-gray-700 hover:text-brand-600 transition">联系我们</a>
+        </nav>
+        <div class="hidden md:block">
+          <a href="index.html#cta" class="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-brand-600 text-white font-medium hover:bg-brand-700 transition">下载 App</a>
+        </div>
+        <button class="md:hidden p-2 text-gray-700" @click="open = !open" aria-label="切换菜单">
+          <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+    </div>
+    <div x-show="open" x-transition class="md:hidden border-t border-brand-100 bg-white">
+      <div class="px-6 py-4 space-y-3">
+        <a href="index.html#features" @click="open = false" class="block text-gray-700 hover:text-brand-600">功能</a>
+        <a href="index.html#meditation" @click="open = false" class="block text-gray-700 hover:text-brand-600">冥想</a>
+        <a href="index.html#testimonials" @click="open = false" class="block text-gray-700 hover:text-brand-600">用户评价</a>
+        <a href="help.html" @click="open = false" class="block text-gray-700 hover:text-brand-600">帮助中心</a>
+        <a href="index.html#contact" @click="open = false" class="block text-gray-700 hover:text-brand-600">联系我们</a>
+        <a href="index.html#cta" @click="open = false" class="inline-flex items-center justify-center w-full px-6 py-2.5 rounded-full bg-brand-600 text-white font-medium">下载 App</a>
+      </div>
+    </div>
+  </header>
 
-  <div class="card">
-    <p><b>安禾（Anhe）</b>是一款提供情绪记录、心理量表自评、正念冥想与心理咨询师对接的辅助类应用。本政策说明我们如何收集、使用、存储与保护你的信息，以及你享有的各项权利。运营主体信息以正式上架版本为准。</p>
-  </div>
+  <main class="pt-28 lg:pt-32 pb-20">
+    <article class="max-w-3xl mx-auto px-6 lg:px-8">
+      <header data-aos="fade-up" class="mb-12">
+        <span class="inline-flex items-center px-4 py-1.5 rounded-full bg-brand-100 text-brand-700 text-sm font-medium mb-6">法律</span>
+        <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">隐私政策</h1>
+        <p class="text-gray-500 text-sm">最后更新：2026 年 8 月</p>
+      </header>
 
-  <h2>一、我们收集的信息</h2>
-  <ul>
-    <li><b>你主动记录的内容</b>：心情、日记、心理量表答案、预约信息等，默认存储于你的设备本地。</li>
-    <li><b>健康数据（HealthKit，需你单独授权）</b>：在你授权后，我们可能读取 Apple 健康中的正念时长、心率、睡眠等数据，仅用于在 App 内做「情绪—身心关联分析」。</li>
-    <li><b>诊断数据</b>：崩溃与性能诊断信息，用于改进稳定性，不包含可识别个人的内容。</li>
-    <li><b>账户信息（如注册）</b>：手机号 / 第三方登录标识（Apple、微信，如接入），仅用于身份验证。</li>
-  </ul>
+      <div class="space-y-10 text-gray-700 leading-relaxed">
+        <section data-aos="fade-up">
+          <h2 class="text-xl font-bold text-gray-900 mb-3">一、我们如何收集你的信息</h2>
+          <p>在你使用时安的过程中，我们可能收集以下信息：你主动填写的心情日记、树洞发布内容、测评结果；你在使用冥想、社区、咨询功能时产生的操作记录；以及设备型号、系统版本、网络状态等必要的技术信息。我们仅在为你提供服务所必需的范围内收集信息，并尽可能采用匿名或去标识化处理。</p>
+        </section>
+        <section data-aos="fade-up">
+          <h2 class="text-xl font-bold text-gray-900 mb-3">二、信息的使用方式</h2>
+          <p>我们使用收集到的信息为你提供核心功能（如情绪图表、测评报告、咨询匹配），改进产品体验，并在获得你同意的前提下向你推送温和的关怀提醒。我们不会将你的日记、倾诉或咨询内容用于广告投放，也不会出售你的个人信息。</p>
+        </section>
+        <section data-aos="fade-up">
+          <h2 class="text-xl font-bold text-gray-900 mb-3">三、信息的存储与安全</h2>
+          <p>你的日记、倾诉内容与咨询记录均采用加密方式存储，并设有严格的访问权限控制。我们采取符合行业标准的技术与管理措施保护你的数据安全。尽管我们尽力防护，但请理解任何互联网传输都无法保证绝对安全。</p>
+        </section>
+        <section data-aos="fade-up">
+          <h2 class="text-xl font-bold text-gray-900 mb-3">四、信息共享与披露</h2>
+          <p>除以下情形外，我们不会向第三方披露你的个人信息：经你明确同意；为完成你请求的咨询服务而向你所选咨询师提供必要的匿名化信息；依据法律法规或有权机关的要求。树洞社区默认匿名，你发布的任何内容都不会与你的真实身份直接关联。</p>
+        </section>
+        <section data-aos="fade-up">
+          <h2 class="text-xl font-bold text-gray-900 mb-3">五、你的权利</h2>
+          <p>你有权访问、更正或删除你的个人信息，随时导出你的日记与测评记录，并可在「我的 - 设置」中撤回已授予的授权。如需行使上述权利，可随时通过页面底部邮箱联系我们。</p>
+        </section>
+        <section data-aos="fade-up">
+          <h2 class="text-xl font-bold text-gray-900 mb-3">六、未成年人保护</h2>
+          <p>时安主要面向成年用户。若你是未满 18 周岁的未成年人，请在监护人陪同下使用，并在监护人同意的前提下提供信息。我们不会对未成年人进行定向营销，并在发现误收集时及时删除。</p>
+        </section>
+        <section data-aos="fade-up">
+          <h2 class="text-xl font-bold text-gray-900 mb-3">七、联系我们</h2>
+          <p>如你对本隐私政策有任何疑问，或希望行使你的个人信息权利，请发送邮件至 <a href="mailto:maple593@163.com" class="text-brand-600 font-medium hover:underline">maple593@163.com</a>，我们会在 1-2 个工作日内回复。</p>
+        </section>
+      </div>
+    </article>
+  </main>
 
-  <h2>二、HealthKit 数据专项声明（重要）</h2>
-  <p>我们严格遵守 Apple《HealthKit 隐私政策》与 App Store 审核指南 5.1.3：</p>
-  <ul>
-    <li>绝不会将 HealthKit 数据用于广告、营销或类似服务；</li>
-    <li>绝不会向广告平台、数据经纪商或任何第三方传输 HealthKit 数据，也绝不转售；</li>
-    <li>HealthKit 数据仅用于本 App 内的本地分析与可视化；</li>
-    <li>你可随时在 iPhone「健康」App 或本 App「设置 → 数据与隐私」中撤销授权或删除相关数据；</li>
-    <li>绝不会利用 HealthKit 数据定位广告或构建用户画像。</li>
-  </ul>
+  <footer class="bg-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+      <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div class="lg:col-span-2">
+          <a href="index.html" class="flex items-center gap-2.5 group">
+            <img src="images/anan-growing-happy.png" alt="时安 IP 安安" class="h-8 w-8 object-contain rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+            <span class="text-2xl font-bold">时安</span>
+          </a>
+          <p class="mt-4 text-gray-400 max-w-xs">你的专属心理陪伴空间</p>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">产品</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="index.html#features" class="hover:text-white transition">功能介绍</a></li>
+            <li><a href="index.html#meditation" class="hover:text-white transition">正念冥想</a></li>
+            <li><a href="index.html#testimonials" class="hover:text-white transition">用户评价</a></li>
+            <li><a href="index.html#cta" class="hover:text-white transition">下载 App</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">支持</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="help.html" class="hover:text-white transition">帮助中心</a></li>
+            <li><a href="privacy.html" class="text-white font-medium transition" aria-current="page">隐私政策</a></li>
+            <li><a href="terms.html" class="hover:text-white transition">用户协议</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="font-semibold mb-4">联系</h5>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="mailto:maple593@163.com" class="hover:text-white transition">maple593@163.com</a></li>
+            <li>微信公众号：时安心理</li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm">
+        <p>Copyright 2026 时安 Shian. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
 
-  <h2>三、我们如何使用信息</h2>
-  <p>提供并改进核心功能（情绪分析、健康关联、个性化建议、冥想与预约）；在你的设备本地生成报告、月报与年度回顾；在获得你明确授权时，将数据同步到你登录的账号（云同步为可选功能）。</p>
-
-  <h2>四、数据存储与安全</h2>
-  <p>默认本地优先存储：心情、日记、测评、预约等数据默认保存在你的设备本地；云同步（如开启）采用加密传输，数据归属你本人；我们采取合理的技术与管理措施保护信息安全。</p>
-
-  <h2>五、数据共享与披露</h2>
-  <p>我们不出售你的个人信息；除以下情形外不与第三方共享你的可识别个人信息：① 获得你的明确同意；② 为提供你要求的服务所必需；③ 法律法规要求或有权机关依法调取。第三方登录（Apple / 微信，如接入）仅用于身份验证，其数据处理受其各自隐私政策约束。</p>
-
-  <h2>六、你的权利</h2>
-  <p>你可随时通过「设置 → 数据与隐私」导出全部数据（含心情、日记、测评、预约、社区发言等），或删除全部本地数据、撤回此前授权的云同步与 HealthKit 授权。删除后我们将停止相关处理，云端副本（如有）在下一次同步周期清除。</p>
-
-  <h2>七、联系我们</h2>
-  <p>如对本政策有任何疑问，可通过 <a href="mailto:privacy@anhe.app" style="color:var(--brand2)">privacy@anhe.app</a> 联系我们。</p>
-</div>
-
-<footer>© 2026 安禾 Anhe · <a href="terms.html">用户协议</a> · <a href="index.html">返回首页</a></footer>
-
-<script>
-  (function(){var r=document.documentElement,b=document.getElementById('tt');var s=localStorage.getItem('hi-site-theme')||'dark';a(s);function a(t){r.setAttribute('data-theme',t);b.textContent=t==='dark'?'🌙':'☀️';}b.addEventListener('click',function(){var n=r.getAttribute('data-theme')==='dark'?'light':'dark';localStorage.setItem('hi-site-theme',n);a(n);});})();
-</script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true, offset: 80, delay: 0 });
+    document.addEventListener('DOMContentLoaded', () => {
+      const header = document.getElementById('siteHeader');
+      const onScroll = () => header.classList.toggle('shadow-sm', window.scrollY > 10);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    });
+  </script>
 </body>
 </html>
