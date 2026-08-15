@@ -65,97 +65,6 @@
       transition: opacity .3s ease, transform .3s ease;
     }
 
-    /* ===== iPhone 17 Pro 手机壳 mockup ===== */
-    .iphone17 {
-      position: relative;
-      display: inline-block;
-      font-size: 16px;
-      background:
-        linear-gradient(165deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 40%),
-        linear-gradient(160deg, #F2F0EC 0%, #C9C4BC 25%, #E6E3DC 50%, #ABA69D 75%, #DDDAD3 100%);
-      padding: 0.75em;
-      border-radius: 3.2em;
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.45),
-        inset 0 0 0.4em rgba(0,0,0,0.10),
-        0 1.75em 4.4em -0.9em rgba(0,0,0,0.28),
-        0 0.6em 1.4em -0.35em rgba(0,0,0,0.12);
-      transition: transform .4s cubic-bezier(.22,.61,.36,1), box-shadow .4s ease;
-      vertical-align: middle;
-    }
-    .iphone17-hover:hover {
-      transform: translateY(-8px) rotate(1.2deg);
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.45),
-        inset 0 0 0.4em rgba(0,0,0,0.10),
-        0 2.4em 6em -0.8em rgba(0,0,0,0.32),
-        0 1em 2.2em -0.3em rgba(0,0,0,0.14);
-    }
-    .iphone17-screen {
-      position: relative;
-      border-radius: 2.55em;
-      overflow: hidden;
-      background: #000;
-      line-height: 0;
-    }
-    .iphone17-screen::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 2.55em;
-      box-shadow: inset 0 0 0 0.15em rgba(0,0,0,0.35);
-      pointer-events: none;
-      z-index: 10;
-    }
-    .iphone17-notch {
-      position: absolute;
-      top: 0.85em;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 5.5em;
-      height: 1.35em;
-      background: #000;
-      border-radius: 999px;
-      z-index: 20;
-    }
-    .iphone17-home-bar {
-      position: absolute;
-      bottom: 0.5em;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 5em;
-      height: 0.3em;
-      background: rgba(255,255,255,0.72);
-      border-radius: 999px;
-      z-index: 20;
-    }
-    .iphone17-buttons {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 5;
-    }
-    .iphone17-buttons::before,
-    .iphone17-buttons::after {
-      content: '';
-      position: absolute;
-      background: linear-gradient(180deg, #D5D1CA, #B5B0A7);
-      border-radius: 0.2em;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
-    }
-    .iphone17-buttons::before {
-      left: -0.22em;
-      top: 5.5em;
-      width: 0.22em;
-      height: 3em;
-    }
-    .iphone17-buttons::after {
-      right: -0.22em;
-      top: 6.5em;
-      width: 0.22em;
-      height: 4em;
-    }
-
     /* FAQ 手风琴 */
     .faq-btn[aria-expanded="true"] .faq-chevron {
       transform: rotate(180deg);
@@ -176,7 +85,6 @@
     @media (prefers-reduced-motion: reduce) {
       [data-aos] { opacity: 1 !important; transform: none !important; }
       .floaty { animation: none; }
-      .iphone17-hover:hover { transform: none; }
     }
   </style>
 </head>
@@ -187,7 +95,7 @@
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
         <a href="#" class="flex items-center gap-2.5 group">
-          <img src="images/anan-growing-happy.png" alt="时安 IP 安安" class="h-10 w-10 object-contain rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+          <img src="anan-growing-happy.png" alt="时安 IP 安安" class="h-10 w-10 object-contain rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
           <span class="text-2xl font-bold text-brand-600 tracking-tight">时安</span>
         </a>
 
@@ -252,14 +160,7 @@
             </div>
           </div>
           <div data-aos="fade-up" data-aos-delay="200" class="relative flex justify-center lg:justify-end">
-            <div class="iphone17 iphone17-hover floaty" style="font-size:18px;">
-              <div class="iphone17-buttons"></div>
-              <div class="iphone17-screen">
-                <div class="iphone17-notch"></div>
-                <img src="images/home.jpg" alt="时安 App 首页" class="w-[280px] lg:w-[320px]" />
-                <div class="iphone17-home-bar"></div>
-              </div>
-            </div>
+            <img src="home.jpg" alt="时安 App 首页" class="relative z-10 w-[280px] lg:w-[320px] rounded-[2.5rem] phone-shadow floaty" />
             <div class="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] rounded-full bg-brand-200/40 blur-3xl"></div>
           </div>
         </div>
@@ -284,28 +185,14 @@
             </p>
           </div>
           <div class="order-1 lg:order-2 flex justify-center" data-aos="fade-up" data-aos-delay="150">
-            <div class="iphone17 iphone17-hover" style="font-size:16px;">
-              <div class="iphone17-buttons"></div>
-              <div class="iphone17-screen">
-                <div class="iphone17-notch"></div>
-                <img src="images/mood.jpg" alt="心情日记" class="w-[260px] lg:w-[300px]" />
-                <div class="iphone17-home-bar"></div>
-              </div>
-            </div>
+            <img src="mood.jpg" alt="心情日记" class="w-[260px] lg:w-[300px] rounded-[2.5rem] phone-shadow lift" />
           </div>
         </div>
 
         <!-- Feature 2 -->
         <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-20 lg:mb-28">
           <div class="flex justify-center" data-aos="fade-up">
-            <div class="iphone17 iphone17-hover" style="font-size:16px;">
-              <div class="iphone17-buttons"></div>
-              <div class="iphone17-screen">
-                <div class="iphone17-notch"></div>
-                <img src="images/community.jpg" alt="树洞社区" class="w-[260px] lg:w-[300px]" />
-                <div class="iphone17-home-bar"></div>
-              </div>
-            </div>
+            <img src="community.jpg" alt="树洞社区" class="w-[260px] lg:w-[300px] rounded-[2.5rem] phone-shadow lift" />
           </div>
           <div data-aos="fade-up" data-aos-delay="150">
             <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-100 text-brand-700 text-xl font-bold mb-6">树</div>
@@ -326,14 +213,7 @@
             </p>
           </div>
           <div class="order-1 lg:order-2 flex justify-center" data-aos="fade-up" data-aos-delay="150">
-            <div class="iphone17 iphone17-hover" style="font-size:16px;">
-              <div class="iphone17-buttons"></div>
-              <div class="iphone17-screen">
-                <div class="iphone17-notch"></div>
-                <img src="images/consultation.jpg" alt="专业咨询" class="w-[260px] lg:w-[300px]" />
-                <div class="iphone17-home-bar"></div>
-              </div>
-            </div>
+            <img src="consultation.jpg" alt="专业咨询" class="w-[260px] lg:w-[300px] rounded-[2.5rem] phone-shadow lift" />
           </div>
         </div>
       </div>
@@ -349,14 +229,7 @@
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div data-aos="fade-up" data-aos-delay="0" class="lift bg-white rounded-3xl p-8 card-shadow text-center">
-            <div class="iphone17 iphone17-hover mx-auto mb-5" style="font-size:10px;">
-              <div class="iphone17-buttons"></div>
-              <div class="iphone17-screen">
-                <div class="iphone17-notch"></div>
-                <img src="images/scale.jpg" alt="量表测评" class="w-28" />
-                <div class="iphone17-home-bar"></div>
-              </div>
-            </div>
+            <img src="scale.jpg" alt="量表测评" class="mx-auto mb-5 w-28 rounded-2xl phone-shadow" />
             <h4 class="text-xl font-bold text-gray-900 mb-2">量表测评</h4>
             <p class="text-gray-600">200+ 专业心理量表，科学了解内心世界</p>
           </div>
@@ -538,7 +411,7 @@
       <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
         <div class="lg:col-span-2">
           <a href="#" class="flex items-center gap-2.5 group">
-            <img src="images/anan-growing-happy.png" alt="时安 IP 安安" class="h-8 w-8 object-contain rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
+            <img src="anan-growing-happy.png" alt="时安 IP 安安" class="h-8 w-8 object-contain rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3" />
             <span class="text-2xl font-bold">时安</span>
           </a>
           <p class="mt-4 text-gray-400 max-w-xs">你的专属心理陪伴空间</p>
