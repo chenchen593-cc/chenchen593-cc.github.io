@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "H7B65GSUW6.com.heartisland.app",
+        "paths": ["/app/*"]
+      }
+    ]
+  }
+}
